@@ -1,0 +1,84 @@
+name: Publish verified Windows Watch Companion EXE
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-watch-companion.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    name: Publish experimental Windows installer to Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the previously verified Windows build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir -p verified-build
+          gh run download 43020614046 --repo "$GH_REPO" --name windows-exe --dir verified-build
+          mapfile -d '' installers < <(find verified-build -type f -iname '*.exe' -print0)
+          if [ "${#installers[@]}" -ne 1 ]; then
+            echo "::error::Expected exactly one EXE from the verified Windows artifact, got ${#installers[@]}"
+            exit 1
+          fi
+          install -m 0644 "${installers[0]}" "iLoader-Windows-Watch-Companion-Experimental-Setup.exe"
+          sha256sum "iLoader-Windows-Watch-Companion-Experimental-Setup.exe" > "SHA256SUMS.txt"
+
+      - name: Write privacy-safe release notes
+        run: |
+          cat > RELEASE_NOTES.md <<'EOF'
+          ## Unofficial experimental Windows Apple Watch companion installer
+
+          **This is not an official iLoader release.** Based on [iLoader](https://github.com/nab138/iloader) and [isideload](https://github.com/nab138/isideload), with experimental Windows Apple Watch companion and watchOS App Group support. It has not been widely tested.
+
+          ### Download
+          Download `iLoader-Windows-Watch-Companion-Experimental-Setup.exe` in **Assets** below. The `SHA256SUMS.txt` file contains the checksum of the installer.
+
+          This release republishes the previously verified `windows-exe` artifact from [GitHub Actions run 43020614046](https://github.com/AlsoSama/iloader/actions/runs/43020614046), built from [iLoader commit `bef7e279`](https://github.com/AlsoSama/iloader/tree/bef7e279769022ded6618520c1fbaf1f6388c084) and [isideload commit `323e5341`](https://github.com/AlsoSama/isideload/tree/323e5341b6f02a182e2c913a09ca43f553322758).
+
+          ### Limitations and privacy
+          - **Experimental**: a successful real-world test does not establish support across every watchOS/iOS version or Apple Developer account.
+          - The installer **does not bundle HermesEnabler** or any pre-signed IPA.
+          - Each user signs in with **their own Apple Account**. No personal account passwords, login cookies, signing profiles, private keys, device logs, or device identifiers are included in this release.
+          - A third-party Anisette provider may receive network/device metadata. Review the trust model before using.
+          - For apps modifying MobileGestalt, make and preserve an initial backup before changing anything.
+          - No Apple, upstream iLoader, isideload, or HermesEnabler endorsement is implied. Respect the projects' MIT source licenses and upstream branding restrictions.
+
+          Full setup notes and source links: [Windows Watch Companion Guide](https://github.com/AlsoSama/iloader/blob/main/docs/WINDOWS_WATCH_COMPANION.md).
+
+          ---
+
+          ## 中文说明
+
+          此版本为**非官方实验性 Windows 安装包**，修复 Apple Watch 配套应用安装与 App Group 授权问题。点击下方 Assets 中的 `iLoader-Windows-Watch-Companion-Experimental-Setup.exe` 即可下载，无需进入 Actions 查找构建产物。
+
+          安装包不附带 HermesEnabler IPA，不包含个人 Apple ID、密码、验证码、设备备份或签名文件。请使用自己的账号，且在修改 MobileGestalt 前做好初始备份。具体用法及兼容性限制见上方指南。
+          EOF
+
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          TAG="watch-companion-exp-2026-11-11"
+          if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; leaving it unchanged."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            "iLoader-Windows-Watch-Companion-Experimental-Setup.exe" \
+            "SHA256SUMS.txt" \
+            --repo "$GH_REPO" \
+            --target "bef7e279769022ded6618520c1fbaf1f6388c084" \
+            --title "Windows Apple Watch Companion (Experimental, 2026-11-11)" \
+            --notes-file RELEASE_NOTES.md \
+            --prerelease
