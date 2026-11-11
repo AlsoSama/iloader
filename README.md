@@ -1,3 +1,5 @@
+> **Unofficial community fork.** This repository is not the official iLoader distribution and is not endorsed by the upstream project. See the original [iLoader project](https://github.com/nab138/iloader). The experimental [Windows Apple Watch companion build and source](docs/WINDOWS_WATCH_COMPANION.md) are provided separately and are not general-purpose stable releases.
+
 <a href="https://iloader.app">
   <picture align="left" >
     <source media="(prefers-color-scheme: dark)" srcset="/iloader.svg">
