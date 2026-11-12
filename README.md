@@ -4,7 +4,7 @@
 
 **[⬇ Download Windows EXE directly from GitHub Releases](https://github.com/AlsoSama/iloader/releases/download/watch-companion-exp-2026-11-11/iLoader-Windows-Watch-Companion-Experimental-Setup.exe)** · [Release notes and SHA-256 checksum](https://github.com/AlsoSama/iloader/releases/tag/watch-companion-exp-2026-11-11) · [Setup guide](docs/WINDOWS_WATCH_COMPANION.md)
 
-This is an **unofficial community prerelease**, not the upstream iLoader stable application. Its Windows installer was successfully built from pinned experimental commits; compatibility with other device/account combinations is unverified. No individual Apple Account credentials or personal diagnostic logs are distributed with this installer.
+This is an **unofficial community release**, not the upstream iLoader stable application. Its Windows installer was successfully built from pinned experimental commits; compatibility with other device/account combinations is unverified. No individual Apple Account credentials or personal diagnostic logs are distributed with this installer.
 
 <a href="https://iloader.app">
   <picture align="left" >

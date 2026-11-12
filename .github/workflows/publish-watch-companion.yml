@@ -1,4 +1,4 @@
-name: Publish verified Windows Watch Companion EXE
+name: Publish Windows Watch Companion Release
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   publish:
-    name: Publish experimental Windows installer to Releases
+    name: Publish or promote community Windows installer
     runs-on: ubuntu-latest
     steps:
       - name: Download the previously verified Windows build
@@ -63,7 +63,7 @@ jobs:
           安装包不附带 HermesEnabler IPA，不包含个人 Apple ID、密码、验证码、设备备份或签名文件。请使用自己的账号，且在修改 MobileGestalt 前做好初始备份。具体用法及兼容性限制见上方指南。
           EOF
 
-      - name: Publish GitHub prerelease
+      - name: Publish or promote GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -71,7 +71,11 @@ jobs:
           set -euo pipefail
           TAG="watch-companion-exp-2026-11-11"
           if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
-            echo "Release $TAG already exists; leaving it unchanged."
+            gh release edit "$TAG" --repo "$GH_REPO" \
+              --prerelease=false \
+              --latest \
+              --title "Windows Apple Watch Companion (Unofficial Community Build, 2026-11-11)"
+            echo "Promoted existing release $TAG to normal latest Release."
             exit 0
           fi
           gh release create "$TAG" \
@@ -79,6 +83,6 @@ jobs:
             "SHA256SUMS.txt" \
             --repo "$GH_REPO" \
             --target "bef7e279769022ded6618520c1fbaf1f6388c084" \
-            --title "Windows Apple Watch Companion (Experimental, 2026-11-11)" \
+            --title "Windows Apple Watch Companion (Unofficial Community Build, 2026-11-11)" \
             --notes-file RELEASE_NOTES.md \
-            --prerelease
+            --latest
