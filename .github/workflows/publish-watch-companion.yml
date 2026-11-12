@@ -1,4 +1,5 @@
 name: Publish Windows Watch Companion Release
+# Promote the existing verified release without rebuilding or repacking its executable.
 
 on:
   push:
