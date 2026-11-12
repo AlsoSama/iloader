@@ -4,10 +4,12 @@
 
 ## Download the verified build
 
-- **[Successful GitHub Actions build (11 November 2026)](https://github.com/AlsoSama/iloader/actions/runs/43020614046)**
-- **[Windows installer artifact: `windows-exe`](https://github.com/AlsoSama/iloader/actions/runs/43020614046/artifacts/13855143172)** — download the ZIP from Actions, extract it and run the Windows installer. A GitHub sign-in may be required.
-- GitHub reported the Actions artifact ZIP SHA-256 as `152b78b5dd6085c2f80081b85bd9d54c889226caf07d5666c2d96b6c051b8089`. **This is the ZIP artifact digest, not a hash of the inner EXE.**
-- The Actions artifact currently has a GitHub expiration date of **9 February 2027**. This is **not** a permanent GitHub Release attachment.
+- **[Download the experimental Windows EXE directly](https://github.com/AlsoSama/iloader/releases/download/watch-companion-exp-2026-11-11/iLoader-Windows-Watch-Companion-Experimental-Setup.exe)** — no Actions navigation required.
+- **[GitHub Release page](https://github.com/AlsoSama/iloader/releases/tag/watch-companion-exp-2026-11-11)** — includes the EXE and `SHA256SUMS.txt` to verify its SHA-256 checksum.
+- **[Original successful Windows build (11 November 2026)](https://github.com/AlsoSama/iloader/actions/runs/43020614046)** — the Release republishes the already-tested Windows EXE from this run, not a newly compiled binary.
+- [Backup Actions artifact (`windows-exe` ZIP)](https://github.com/AlsoSama/iloader/actions/runs/43020614046/artifacts/13855143172). This temporary Actions artifact is separate from the GitHub Release.
+
+The source builds and Windows Release are **experimental**, not security audits or broad device-compatibility certifications.
 
 The build passed the GitHub Actions Windows job. It was tested on one paired iPhone/Apple Watch setup; compatibility across other accounts, devices and software versions has **not** been established.
 
@@ -32,7 +34,7 @@ These changes **do not** bypass Apple's account, device, developer-team, entitle
 
 ## How to use
 
-1. Download the Windows `windows-exe` artifact above, extract the ZIP and install the EXE.
+1. Download the Windows installer EXE from the GitHub Release above, and run it. You can optionally verify the SHA-256 checksum using the accompanying `SHA256SUMS.txt`.
 2. Use a compatible iPhone paired with an Apple Watch; install Apple's Windows device drivers if needed.
 3. Launch iLoader and authenticate using **your own** Apple Account. Two-factor authentication may be required. Use a trusted Anisette service; third-party Anisette providers have their own privacy implications.
 4. Import the IPA of an app that actually includes a watchOS companion, then select the paired iPhone for installation. For HermesEnabler, obtain the IPA from the [original project](https://github.com/pookjw/HermesEnabler); it is **not bundled** here.
@@ -52,7 +54,7 @@ For HermesEnabler specifically, keep the app and its initial MobileGestalt backu
 - Experimental code, tested in only a narrow configuration. A successful build is not a security audit or broad compatibility certification.
 - The Windows installer may continue to show the upstream app version in its title; use the **commit hashes and Actions run ID** to identify this build.
 - Apple may change private signing/developer endpoints, account throttling, required entitlements, or pairing behavior without notice.
-- The Windows artifact expires; a durable GitHub Release download has **not** been created.
+- The original GitHub Actions ZIP artifact expires, but the same verified EXE is now separately attached to the GitHub prerelease. Use the Release link above.
 - This fork is not affiliated with Apple, iLoader, Sideloadly or HermesEnabler.
 
 ## Credits and licensing
@@ -65,7 +67,7 @@ Based on [iLoader](https://github.com/nab138/iloader) and [isideload](https://gi
 
 这是一份**非官方实验版**，用于在 Windows 上侧载包含 Apple Watch 配套应用的 IPA，并修复了 Apple Watch App Group 授权问题。
 
-- 下载：[成功构建记录](https://github.com/AlsoSama/iloader/actions/runs/43020614046)，选择 **`windows-exe`**。
+- **直接下载 Windows EXE**：[点击下载](https://github.com/AlsoSama/iloader/releases/download/watch-companion-exp-2026-11-11/iLoader-Windows-Watch-Companion-Experimental-Setup.exe)；也可前往 [Releases 页面](https://github.com/AlsoSama/iloader/releases/tag/watch-companion-exp-2026-11-11) 下载 EXE 和 SHA-256 校验文件，无需再进入 Actions。
 - 对应源码：[iLoader](https://github.com/AlsoSama/iloader/tree/bef7e279769022ded6618520c1fbaf1f6388c084) / [isideload](https://github.com/AlsoSama/isideload/tree/323e5341b6f02a182e2c913a09ca43f553322758)。
 - 安装包**不附带 HermesEnabler IPA**；请从原项目取得。务必使用自己的 Apple ID，不要上传账号密码、签名文件、设备 UDID、调试日志等个人数据。
 - 本项目**不是稳定正式版**，没有在所有设备和系统版本上验证。若修改过 MobileGestalt，请先备份；未恢复前不要随意卸载相关手表应用。
